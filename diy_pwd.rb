@@ -23,11 +23,11 @@ class MyPwd
   end
 
   def lcg seed
-    seed * 630360016 % 2147483647
+    seed * 630_360_016 % 2_147_483_647
   end
 
   def gen_pwd seed, size, try
-    [*1..size].inject([seed + try]){|n, x| n << (lcg n[-1])}[1..size]
+    [*1..size].reduce([seed + try]){|n, _| n << (lcg n[-1])}[1..size]
   end
 
   def fmt_pwd pwd, rule, custom
@@ -36,7 +36,7 @@ class MyPwd
   end
 
   def show desc, rule=false, rev:0, size:10, try:0, custom:@custom
-    rl = unless rule then @@rule else rule.split('').map {|x| @@rules[x].to_a } end
+    rl = !rule ? @@rule : rule.split('').map {|x| @@rules[x].to_a }
     seed = gen_seed desc, rev
     result = nil
     until verify result, rl
@@ -51,12 +51,12 @@ class MyPwd
     return false unless pwd
     rst = rule.map do |r|
       lambda do
-        for x in pwd
+        pwd.each do |x|
           return true if r.include? x
         end
         return false
       end[]
     end
-    rst.inject{|n, x| n and x }
+    rst.reduce{|n, x| n && x }
   end
 end
