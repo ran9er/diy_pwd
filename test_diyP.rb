@@ -1,6 +1,13 @@
 require 'minitest/autorun'
 require './diy_pwd'
 
+describe 'usage' do
+  it 'show' do
+    passwd = MyPwd.new 'passwd'
+    print 'You password of www.web-site.com is: ', passwd.show('www.web-site.com').pwd, "\n"
+  end
+end
+
 def variance x
   avg = x.reduce(0.0){|a,n|a + n} / x.size
   x.reduce(0.0){|a,n| a + (n - avg)**2} / x.size
@@ -178,5 +185,6 @@ describe MyPwd do
       print "#{rp.size}/#{target.size} : #{rp}\n"
     end
   end
+
 end
 
