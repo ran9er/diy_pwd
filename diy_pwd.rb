@@ -13,13 +13,14 @@ end
 
 class MyPwd
   @@rules = {'u' => 'A'..'Z', 'd' => 'a'..'z', 'n' => '0'..'9', 'o' => '#'..'&'}
-  def initialize primary_pwd, rule='udn', custom=''
+  def initialize primary_pwd, rule:'udn', custom:'', digest:Digest::SHA1
     @primary, @rule, @custom = primary_pwd, rule, custom
+    @digest = digest
     @@rule = rule.split('').map {|x| @@rules[x].to_a }
   end
 
   def gen_seed desc, rev
-    (Digest::SHA1.hexdigest @primary + desc + rev.to_s).to_i(16)
+    (@digest.hexdigest @primary + desc + rev.to_s).to_i(16)
   end
 
   def lcg seed
